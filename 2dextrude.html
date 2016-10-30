@@ -142,8 +142,6 @@ renderer.visualVariables = [{
           renderer:renderer
         });
         
-var featureLayerT = new FeatureLayer("http://services7.arcgis.com/cS890GsOFd26sODz/arcgis/rest/services/RoutingRoad3/FeatureServer/0" );
-        
         var track = new Track({
         view: view
       });
@@ -159,7 +157,6 @@ var featureLayerT = new FeatureLayer("http://services7.arcgis.com/cS890GsOFd26sO
         
         featureLayer.popupTemplate = template;
 
-        map.add(featureLayerT);
         map.add(featureLayer);
         
         
