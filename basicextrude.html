@@ -86,12 +86,23 @@ var renderer = new UniqueValueRenderer({
   defaultSymbol: new SimpleFillSymbol()
 });
 
-renderer.addUniqueValueInfo("test",
+renderer.addUniqueValueInfo("high",
   new SimpleFillSymbol({
     color: "red"
   })
 );
 
+renderer.addUniqueValueInfo("mid",
+  new SimpleFillSymbol({
+    color: "green"
+  })
+);
+
+renderer.addUniqueValueInfo("low",
+  new SimpleFillSymbol({
+    color: "yellow"
+  })
+);
 renderer.visualVariables = [{
   type: "opacityInfo",
   field: "Address",
