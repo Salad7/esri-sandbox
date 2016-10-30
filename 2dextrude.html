@@ -37,6 +37,7 @@
  "dojo/parser",
         "dijit/layout/BorderContainer", 
         "dijit/layout/ContentPane",
+        "esri/layers/GraphicsLayer",
         "dojo/domReady!"
       ],
       function(
@@ -72,7 +73,7 @@
         var view = new SceneView({
           container: "viewDiv",
           map: map,
-zoom: 17,
+zoom: 18,
 center: [-79.0458, 35.9095]
         });
 
@@ -89,13 +90,21 @@ center: [-79.0458, 35.9095]
 
 var template = {
         "fieldInfos": [{
-          "fieldName": "Address",
+          "fieldName": "Name",
           "format": {
             "places": 0,
             "digitSeparator": true
           }
-        }], 
-        "title": "Found! {Address} amount of friends here",
+        },
+        {
+            fieldName: "Name",
+            visible: true,
+            format: {
+              places: 0
+            }
+          }], 
+        
+        "title": "Found! {Name} are here",
         
 };
 
@@ -109,7 +118,13 @@ var renderer = new UniqueValueRenderer({
 });
 
 
-renderer.addUniqueValueInfo("high",
+var renderer2 = new UniqueValueRenderer({
+  field: "Name",
+  defaultSymbol: new SimpleFillSymbol()
+});
+
+
+renderer.addUniqueValueInfo("low",
   new SimpleFillSymbol({
     color: "red"
   })
@@ -117,15 +132,17 @@ renderer.addUniqueValueInfo("high",
 
 renderer.addUniqueValueInfo("mid",
   new SimpleFillSymbol({
+    color: "yellow"
+  })
+);
+
+renderer.addUniqueValueInfo("high",
+  new SimpleFillSymbol({
     color: "green"
   })
 );
 
-renderer.addUniqueValueInfo("low",
-  new SimpleFillSymbol({
-    color: "yellow"
-  })
-);
+renderer.addUniqueValueInfo("road", new SimpleFillSymbol({ color: "black" }) );
 
 renderer.visualVariables = [{
   type: "opacityInfo",
@@ -139,7 +156,15 @@ renderer.visualVariables = [{
         // Carbon storage of trees in Warren Wilson College.
         var featureLayer = new FeatureLayer({
           url: "http://services7.arcgis.com/cS890GsOFd26sODz/arcgis/rest/services/UNCV2/FeatureServer/0",
-          renderer:renderer
+          renderer:renderer,
+    
+        });
+        
+        // Carbon storage of trees in Warren Wilson College.
+        var featureLayer2 = new FeatureLayer({
+          url: "http://services7.arcgis.com/cS890GsOFd26sODz/arcgis/rest/services/UNCV2/FeatureServer/0",
+          renderer:renderer2,
+    
         });
         
         var track = new Track({
@@ -155,10 +180,11 @@ renderer.visualVariables = [{
       
      
         
-        featureLayer.popupTemplate = template;
+        //featureLayer.popupTemplate = template;
+        featureLayer2.popupTemplate = template;
 
         map.add(featureLayer);
-        
+         map.add(featureLayer2);
         
 //default will point to ArcGIS world routing service
         var directions = new Directions({
