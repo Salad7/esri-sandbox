@@ -21,9 +21,9 @@
 
   <script>
     require([
+        "esri/widgets/Track",
         "esri/Map",
         "esri/views/SceneView",
-
         "esri/layers/FeatureLayer",
           "esri/renderers/UniqueValueRenderer",
       "esri/symbols/ExtrudeSymbol3DLayer",
@@ -33,6 +33,7 @@
         "dojo/domReady!"
       ],
       function(
+        Track,
         Map, 
         SceneView,
         FeatureLayer,
@@ -69,13 +70,10 @@ center: [-79.0558, 35.9132]
 });
 
 var template = {
-  title: "Marriage in NY, Zip Code: {ZIP}",
+  title: "Found friend!",
   // Four fields are used in this template. The value of the selected feature will be
   // inserted in the location of each field name below
-  content: "<p>As of 2015, <b>{MARRIEDRATE}%</b> of the population in this zip code is married.</p>" +
-    "<ul><li>{MARRIED_CY} people are married</li>" +
-    "<li>{NEVMARR_CY} have never married</li>" +
-    "<li>{DIVORCD_CY} are divorced</li><ul>"
+  content: "<p>Is located here.</p>"
 };
 
 //var citiesRenderer = new UniqueValueRenderer({
@@ -117,6 +115,17 @@ renderer.visualVariables = [{
           url: "http://services7.arcgis.com/cS890GsOFd26sODz/arcgis/rest/services/UNCV2/FeatureServer/0",
           renderer:renderer
         });
+        
+        var track = new Track({
+        view: view
+      });
+      view.ui.add(track, "top-left");
+
+      // The sample will start tracking your location
+      // once the view becomes ready
+      view.then(function() {
+        track.start();
+      });
         
         featureLayer.popupTemplate = template;
 
