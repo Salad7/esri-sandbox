@@ -70,11 +70,17 @@ center: [-79.0558, 35.9132]
 });
 
 var template = {
-  title: "Found friend!",
-  // Four fields are used in this template. The value of the selected feature will be
-  // inserted in the location of each field name below
-  content: "<p>Is located here.</p>"
+        "fieldInfos": [{
+          "fieldName": "Address",
+          "format": {
+            "places": 0,
+            "digitSeparator": true
+          }
+        }], 
+        "title": "Found! {Address} amount of people here",
+        
 };
+
 
 //var citiesRenderer = new UniqueValueRenderer({
   //symbol: symbol
@@ -83,6 +89,7 @@ var renderer = new UniqueValueRenderer({
   field: "Address",
   defaultSymbol: new SimpleFillSymbol()
 });
+
 
 renderer.addUniqueValueInfo("high",
   new SimpleFillSymbol({
@@ -124,7 +131,7 @@ renderer.visualVariables = [{
       // The sample will start tracking your location
       // once the view becomes ready
       view.then(function() {
-        track.start();
+       // track.start();
       });
         
         featureLayer.popupTemplate = template;
