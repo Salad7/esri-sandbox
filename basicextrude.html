@@ -66,6 +66,16 @@ center: [-79.0558, 35.9132]
   })]
 });
 
+var template = {
+  title: "Marriage in NY, Zip Code: {ZIP}",
+  // Four fields are used in this template. The value of the selected feature will be
+  // inserted in the location of each field name below
+  content: "<p>As of 2015, <b>{MARRIEDRATE}%</b> of the population in this zip code is married.</p>" +
+    "<ul><li>{MARRIED_CY} people are married</li>" +
+    "<li>{NEVMARR_CY} have never married</li>" +
+    "<li>{DIVORCD_CY} are divorced</li><ul>"
+};
+
 var citiesRenderer = new SimpleRenderer({
   symbol: symbol
 });
@@ -75,10 +85,14 @@ var citiesRenderer = new SimpleRenderer({
           url: "http://services7.arcgis.com/cS890GsOFd26sODz/arcgis/rest/services/UNCV2/FeatureServer/0",
           renderer:citiesRenderer
         });
+        
+        featureLayer.popupTemplate = template;
 
         map.add(featureLayer);
 
       });
+      
+      
   </script>
 </head>
 
