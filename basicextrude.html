@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>FeatureLayer - 4.1</title>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.1/esri/css/main.css">
+  <script src="https://js.arcgis.com/4.1/"></script>
+
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
+  <script>
+    require([
+        "esri/Map",
+        "esri/views/SceneView",
+
+        "esri/layers/FeatureLayer",
+          "esri/renderers/SimpleRenderer",
+      "esri/symbols/ExtrudeSymbol3DLayer",
+      "esri/symbols/PolygonSymbol3D",
+
+        "dojo/domReady!"
+      ],
+      function(
+        Map, 
+        SceneView,
+        FeatureLayer,
+        SimpleRenderer,
+      ExtrudeSymbol3DLayer, 
+      PolygonSymbol3D
+      
+        
+      ) {
+
+        var map = new Map({
+          basemap: "streets"
+        });
+        
+        var size = 100
+
+        var view = new SceneView({
+          container: "viewDiv",
+          map: map,
+zoom: 14,
+center: [-79.0558, 35.9132]
+        });
+
+        /********************
+         * Add feature layer
+         ********************/
+         
+         var symbol = new PolygonSymbol3D({
+  symbolLayers: [new ExtrudeSymbol3DLayer({
+    size: size,  // 100,000 meters in height
+    material: { color: size > 300 ? 'red' : 'blue' }
+  })]
+});
+
+var citiesRenderer = new SimpleRenderer({
+  symbol: symbol
+});
+
+        // Carbon storage of trees in Warren Wilson College.
+        var featureLayer = new FeatureLayer({
+          url: "http://services7.arcgis.com/cS890GsOFd26sODz/arcgis/rest/services/UNCV2/FeatureServer/0",
+          renderer:citiesRenderer
+        });
+
+        map.add(featureLayer);
+
+      });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
+
+</html>

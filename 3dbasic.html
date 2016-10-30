@@ -1,32 +1,60 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>Get started with SceneView - Create a 3D map</title>
-<link rel="stylesheet" href="style.css" type="text/css" />
-<link rel="stylesheet" href="https://js.arcgis.com/4.1/esri/css/main.css">
-<script src="https://js.arcgis.com/4.1/"></script>
-<script>
-require([
-  "esri/Map",
-  "esri/views/SceneView",
-  "dojo/domReady!"
-], function(Map, SceneView){
-  var map = new Map({
-    basemap: "streets",
-    ground: "world-elevation"
-  });
-  var view = new SceneView({
-    container: "viewDiv",     // Reference to the scene div created in step 5
-    map: map,                 // Reference to the map object created before the scene
-    scale: 50000000,          // Sets the initial scale to 1:50,000,000
-    center: [-101.17, 21.78]  // Sets the center point of view with lon/lat
-  });
-});
-</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Track current location - 4.1</title>
+
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.1/esri/css/main.css">
+  <script src="https://js.arcgis.com/4.1/"></script>
+
+  <script>
+    require([
+      "esri/widgets/Track",
+      "esri/views/MapView",
+      "esri/Map",
+      "dojo/domReady!"
+    ], function(
+      Track, MapView, Map
+    ) {
+
+      var map = new Map({
+        basemap: "topo"
+      });
+
+      var view = new MapView({
+        map: map,
+        container: "viewDiv"
+      });
+
+      // Create an instance of the Track widget
+      // and add it to the view's UI
+      var track = new Track({
+        view: view
+      });
+      view.ui.add(track, "top-left");
+
+      // The sample will start tracking your location
+      // once the view becomes ready
+      view.then(function() {
+        track.start();
+      });
+    });
+  </script>
 </head>
+
 <body>
   <div id="viewDiv"></div>
 </body>
+
 </html>
