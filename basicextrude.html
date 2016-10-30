@@ -25,9 +25,10 @@
         "esri/views/SceneView",
 
         "esri/layers/FeatureLayer",
-          "esri/renderers/SimpleRenderer",
+          "esri/renderers/UniqueValueRenderer",
       "esri/symbols/ExtrudeSymbol3DLayer",
       "esri/symbols/PolygonSymbol3D",
+      "esri/symbols/SimpleFillSymbol",
 
         "dojo/domReady!"
       ],
@@ -35,9 +36,10 @@
         Map, 
         SceneView,
         FeatureLayer,
-        SimpleRenderer,
+        UniqueValueRenderer,
       ExtrudeSymbol3DLayer, 
-      PolygonSymbol3D
+      PolygonSymbol3D,
+      SimpleFillSymbol
       
         
       ) {
@@ -62,7 +64,7 @@ center: [-79.0558, 35.9132]
          var symbol = new PolygonSymbol3D({
   symbolLayers: [new ExtrudeSymbol3DLayer({
     size: size,  // 100,000 meters in height
-    material: { color: size > 300 ? 'red' : 'blue' }
+    //material: { color: size > 300 ? 'red' : 'blue' }
   })]
 });
 
@@ -76,14 +78,33 @@ var template = {
     "<li>{DIVORCD_CY} are divorced</li><ul>"
 };
 
-var citiesRenderer = new SimpleRenderer({
-  symbol: symbol
+//var citiesRenderer = new UniqueValueRenderer({
+  //symbol: symbol
+//});
+var renderer = new UniqueValueRenderer({
+  field: "Address",
+  defaultSymbol: new SimpleFillSymbol()
 });
+
+renderer.addUniqueValueInfo("test",
+  new SimpleFillSymbol({
+    color: "red"
+  })
+);
+
+renderer.visualVariables = [{
+  type: "opacityInfo",
+  field: "Address",
+  normalizationField: "SQ_KM",
+  // features with 30 ppl/sq km or below are assiged the first opacity value
+  stops: [{ value: 100, opacity: 0.15 },
+        { value: 1000, opacity: 0.90 }]
+}];
 
         // Carbon storage of trees in Warren Wilson College.
         var featureLayer = new FeatureLayer({
           url: "http://services7.arcgis.com/cS890GsOFd26sODz/arcgis/rest/services/UNCV2/FeatureServer/0",
-          renderer:citiesRenderer
+          renderer:renderer
         });
         
         featureLayer.popupTemplate = template;
