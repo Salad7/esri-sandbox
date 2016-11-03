@@ -20,8 +20,9 @@ require([
   "esri/views/SceneView",
   "esri/layers/FeatureLayer",
   "esri/widgets/Search",
+  "esri/widgets/Locate",
   "dojo/domReady!"
-], function(Map, SceneView, FeatureLayer, Search){
+], function(Map, SceneView, FeatureLayer, Search, Locate){
   var map = new Map({
     basemap: "streets",
     ground: "world-elevation"
@@ -33,7 +34,7 @@ require([
     center: [-101.17, 21.78]  // Sets the center point of view with lon/lat
   });
    var fl = new FeatureLayer({
-    url: "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer/3"
+    url: "http://services7.arcgis.com/cS890GsOFd26sODz/arcgis/rest/services/ProjectD/FeatureServer/0"
   });
   map.add(fl);  // adds the layer to the map
   var searchWidget = new Search({
@@ -45,6 +46,19 @@ view.ui.add(searchWidget, {
   position: "top-left",
   index: 2
 });
+
+// This graphics layer will store the graphic used to display the user's location
+var gl = new GraphicsLayer();
+map.add(gl);
+
+var locateWidget = new Locate({
+  view: view,   // Attaches the Locate button to the view
+  graphicsLayer: gl  // The layer the locate graphic is assigned to
+});
+// startup() must be called to start the widget
+locateWidget.startup();
+
+view.ui.add(locateWidget, "top-right");
 });
 </script>
 </head>
