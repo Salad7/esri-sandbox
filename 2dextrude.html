@@ -9,7 +9,10 @@
   <link rel="stylesheet" href="https://js.arcgis.com/3.18/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="https://js.arcgis.com/3.18/esri/css/esri.css">
   <script src="https://js.arcgis.com/4.1/"></script>
-  
+  <body>
+  <div id="viewDiv"></div>
+  <button onclick="myFunction()">Click me</button>
+</body>
 
   <style>
     html,
@@ -21,10 +24,11 @@
       width: 100%;
     }
   </style>
+  
+  
 
   <script>
     require([
-        "esri/core/urlUtils",
         "esri/Map",
         "esri/views/SceneView",
         "esri/layers/FeatureLayer",
@@ -41,8 +45,7 @@
         "dojo/domReady!"
       ],
       function(
-        urlUtils,
-        Map, 
+        Map, //
         SceneView,
         FeatureLayer,
         UniqueValueRenderer,
@@ -55,17 +58,10 @@
 
         parser.parse();
         //all requests to route.arcgis.com will proxy to the proxyUrl defined in this object.
-        urlUtils.addProxyRule({
-          urlPrefix: "route.arcgis.com",
-          proxyUrl: "/sproxy/"
-        });
-        urlUtils.addProxyRule({
-          urlPrefix: "traffic.arcgis.com",
-          proxyUrl: "/sproxy/"
-        });
+      
         
         var map = new Map({
-          basemap: "dark-gray"
+          basemap: "streets"
         });
         
         var size = 100
@@ -73,7 +69,7 @@
         var view = new SceneView({
           container: "viewDiv",
           map: map,
-zoom: 18,
+zoom: 17,
 center: [-79.0458, 35.9095]
         });
 
@@ -146,7 +142,10 @@ renderer.addUniqueValueInfo("road", new SimpleFillSymbol({ color: "black" }) );
 
 renderer.visualVariables = [{
   type: "opacityInfo",
-  field: "Address",
+  field: "Height",
+  type: "size",
+  field: "ELEVATION",
+  valueUnit: "feet", // Converts and extrudes all data values in feet
   normalizationField: "SQ_KM",
   // features with 30 ppl/sq km or below are assiged the first opacity value
   stops: [{ value: 100, opacity: 0.15 },
@@ -155,14 +154,14 @@ renderer.visualVariables = [{
 
         // Carbon storage of trees in Warren Wilson College.
         var featureLayer = new FeatureLayer({
-          url: "http://services7.arcgis.com/cS890GsOFd26sODz/arcgis/rest/services/UNCV2/FeatureServer/0",
+          url: "https://services7.arcgis.com/cS890GsOFd26sODz/arcgis/rest/services/UNCV2/FeatureServer/0",
           renderer:renderer,
     
         });
         
         // Carbon storage of trees in Warren Wilson College.
         var featureLayer2 = new FeatureLayer({
-          url: "http://services7.arcgis.com/cS890GsOFd26sODz/arcgis/rest/services/UNCV2/FeatureServer/0",
+          url: "https://services7.arcgis.com/cS890GsOFd26sODz/arcgis/rest/services/UNCV2/FeatureServer/0",
           renderer:renderer2,
     
         });
@@ -178,17 +177,29 @@ renderer.visualVariables = [{
        // track.start();
       });
       
-     
+      
+      
         
         //featureLayer.popupTemplate = template;
         featureLayer2.popupTemplate = template;
 
         map.add(featureLayer);
-         map.add(featureLayer2);
+        map.add(featureLayer2);
+         
+         setInterval(function(){ 
+  
+  map.removeAll();
+  map.add(featureLayer);
+  map.add(featureLayer2)
+}, 6000);
+   
+        
+         
+         
         
 //default will point to ArcGIS world routing service
-        var directions = new Directions({
-          map: map
+        //var directions = new Directions({
+          //map: map
           // --------------------------------------------------------------------
           // New constuctor option and property showSaveButton added at version
           // 3.17 to allow saving route. For more information see the API Reference.
@@ -197,17 +208,16 @@ renderer.visualVariables = [{
           // Uncomment the line below to add the save button to the Directions widget
           // --------------------------------------------------------------------
           // , showSaveButton: true
-        },"dir");
-        directions.startup();
+        //},"dir");
+        //directions.startup();
 
       });
       
       
   </script>
+  
+  
 </head>
 
-<body>
-  <div id="viewDiv"></div>
-</body>
 
 </html>

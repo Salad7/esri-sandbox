@@ -33,8 +33,7 @@
       "esri/symbols/PolygonSymbol3D",
       "esri/symbols/SimpleFillSymbol",
       "esri/widgets/Track",
- //"esri/dijit/Directions",
- "dojo/parser",
+      "dojo/parser",
         "dijit/layout/BorderContainer", 
         "dijit/layout/ContentPane",
         "dojo/domReady!"
@@ -130,6 +129,9 @@ renderer.addUniqueValueInfo("low",
 renderer.visualVariables = [{
   type: "opacityInfo",
   field: "Address",
+  type: "size",
+  field: "ELEVATION",
+  valueUnit: "feet", // Converts and extrudes all data values in feet
   normalizationField: "SQ_KM",
   // features with 30 ppl/sq km or below are assiged the first opacity value
   stops: [{ value: 100, opacity: 0.15 },
@@ -164,8 +166,8 @@ var featureLayerT = new FeatureLayer("http://services7.arcgis.com/cS890GsOFd26sO
         
         
 //default will point to ArcGIS world routing service
-        var directions = new Directions({
-          map: map
+        //var directions = new Directions({
+         // map: map
           // --------------------------------------------------------------------
           // New constuctor option and property showSaveButton added at version
           // 3.17 to allow saving route. For more information see the API Reference.
@@ -174,8 +176,8 @@ var featureLayerT = new FeatureLayer("http://services7.arcgis.com/cS890GsOFd26sO
           // Uncomment the line below to add the save button to the Directions widget
           // --------------------------------------------------------------------
           // , showSaveButton: true
-        },"dir");
-        directions.startup();
+        //},"dir");
+        //directions.startup();
 
       });
       
