@@ -18,8 +18,10 @@
 require([
   "esri/Map",
   "esri/views/SceneView",
+  "esri/layers/FeatureLayer",
+  "esri/widgets/Search",
   "dojo/domReady!"
-], function(Map, SceneView){
+], function(Map, SceneView, FeatureLayer, Search){
   var map = new Map({
     basemap: "streets",
     ground: "world-elevation"
@@ -30,6 +32,19 @@ require([
     scale: 50000000,          // Sets the initial scale to 1:50,000,000
     center: [-101.17, 21.78]  // Sets the center point of view with lon/lat
   });
+   var fl = new FeatureLayer({
+    url: "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer/3"
+  });
+  map.add(fl);  // adds the layer to the map
+  var searchWidget = new Search({
+  view: view
+});
+// Adds the search widget below other elements in
+// the top left corner of the view
+view.ui.add(searchWidget, {
+  position: "top-left",
+  index: 2
+});
 });
 </script>
 </head>
